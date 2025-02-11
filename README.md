@@ -1,5 +1,5 @@
-PSDI NEMD Workshop
-==================
+CCPBioSim NEMD Workshop
+=======================
 
 [![nemd workshop](https://github.com/jimboid/biosim-nemd-workshop/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/jimboid/biosim-nemd-workshop/actions/workflows/build.yml)
 
