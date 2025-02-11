@@ -1,4 +1,4 @@
-name: nemd workshop
+name: build
 
 on:
   repository_dispatch:
