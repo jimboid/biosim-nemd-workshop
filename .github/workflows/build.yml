@@ -18,10 +18,8 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Build image
-        env:
-          FILE_DL_PATH: ${{ secrets.FILE_DL_PATH }}
         run: |
-          docker build . --build-arg BASE_IMAGE=${{ env.TAG }} --build-arg FILE_DL_PATH=$FILE_DL_PATH \
+          docker build . --build-arg BASE_IMAGE=${{ env.TAG }} \
           -t ${{ env.REGISTRY }}/${{ env.REPO }}/${{ env.IMAGE_NAME }}:${{ env.TAG }} \
           -t ${{ env.REGISTRY }}/${{ env.REPO }}/${{ env.IMAGE_NAME }}:latest
 
