@@ -2,8 +2,6 @@
 ARG BASE_IMAGE=latest
 FROM harbor.stfc.ac.uk/biosimulation-cloud/biosim-jupyter-base:$BASE_IMAGE
 
-ARG FILE_DL_PATH=null
-
 LABEL maintainer="James Gebbie-Rayet <james.gebbie@stfc.ac.uk>"
 
 # Root to install "rooty" things.
@@ -31,9 +29,9 @@ ENV PATH=/opt/gromacs-2022.4/bin:$PATH
 # Copy lab workspace
 COPY --chown=1000:100 default-37a8.jupyterlab-workspace /home/jovyan/.jupyter/lab/workspaces/default-37a8.jupyterlab-workspace
 
-RUN wget $FILE_DL_PATH/D-NEMD_tutorial.tar.xz
-RUN tar xvf D-NEMD_tutorial.tar.xz
-RUN rm D-NEMD_tutorial.tar.xz
+RUN wget https://www.hecbiosim.ac.uk/workshop_files/D-NEMD_tutorial.tar.xz
+RUN tar xvf D-NEMD_tutorial.tar.xz && \
+    rm D-NEMD_tutorial.tar.xz
 
 # UNCOMMENT THIS LINE FOR REMOTE DEPLOYMENT
 COPY jupyter_notebook_config.py /etc/jupyter/
