@@ -4,7 +4,7 @@ FROM ghcr.io/jimboid/biosim-jupyter-base:$BASE_IMAGE
 
 LABEL maintainer="James Gebbie-Rayet <james.gebbie@stfc.ac.uk>"
 LABEL org.opencontainers.image.source=https://github.com/jimboid/biosim-nemd-workshop
-LABEL org.opencontainers.image.description="A repository containing the build steps for the ccpbiosim workshop on non-equilibrium MD."
+LABEL org.opencontainers.image.description="A container environment for the ccpbiosim workshop on non-equilibrium MD."
 LABEL org.opencontainers.image.licenses=MIT
 
 # Root to install "rooty" things.
