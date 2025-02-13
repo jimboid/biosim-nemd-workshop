@@ -1,8 +1,11 @@
 # Start with BioSim base image.
 ARG BASE_IMAGE=latest
-FROM harbor.stfc.ac.uk/biosimulation-cloud/biosim-jupyter-base:$BASE_IMAGE
+FROM ghcr.io/jimboid/biosim-jupyter-base:$BASE_IMAGE
 
 LABEL maintainer="James Gebbie-Rayet <james.gebbie@stfc.ac.uk>"
+LABEL org.opencontainers.image.source=https://github.com/jimboid/biosim-nemd-workshop
+LABEL org.opencontainers.image.description="A repository containing the build steps for the ccpbiosim workshop on non-equilibrium MD."
+LABEL org.opencontainers.image.licenses=MIT
 
 # Root to install "rooty" things.
 USER root
