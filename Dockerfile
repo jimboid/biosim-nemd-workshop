@@ -27,7 +27,7 @@ WORKDIR /tmp/gromacs-$GMX_VERSION/build
 RUN cmake .. -DCMAKE_INSTALL_PREFIX=/opt/gromacs-$GMX_VERSION -DGMX_BUILD_OWN_FFTW=ON -DGMX_OPENMP=ON -DGMXAPI=OFF -DCMAKE_BUILD_TYPE=Release
 RUN make -j8
 RUN make install
-RUN rm -r /tmp/gromacs-2023.4 && \
+RUN rm -r /tmp/gromacs-$GMX_VERSION && \
     chown -R 1000:100 /opt/gromacs-$GMX_VERSION
 
 ENV PATH=/opt/gromacs-$GMX_VERSION/bin:$PATH
