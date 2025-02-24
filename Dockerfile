@@ -1,33 +1,43 @@
 # Start with BioSim base image.
 ARG BASE_IMAGE=latest
-FROM ghcr.io/jimboid/biosim-jupyter-base:$BASE_IMAGE
+FROM ghcr.io/jimboid/biosim-jupyterhub-base:$BASE_IMAGE
 
 LABEL maintainer="James Gebbie-Rayet <james.gebbie@stfc.ac.uk>"
 LABEL org.opencontainers.image.source=https://github.com/jimboid/biosim-nemd-workshop
 LABEL org.opencontainers.image.description="A container environment for the ccpbiosim workshop on non-equilibrium MD."
 LABEL org.opencontainers.image.licenses=MIT
 
+ARG GMX_VERSION=2025.0
+
 # Root to install "rooty" things.
 USER root
 
-WORKDIR /opt
-RUN wget ftp://ftp.gromacs.org/gromacs/gromacs-2022.4.tar.gz
-RUN tar xvf gromacs-2022.4.tar.gz && \
-    rm gromacs-2022.4.tar.gz
-WORKDIR /opt/gromacs-2022.4
+WORKDIR /tmp
+# Grab a specified version of gromacs
+RUN wget ftp://ftp.gromacs.org/gromacs/gromacs-$GMX_VERSION.tar.gz && \
+    tar xvf gromacs-$GMX_VERSION.tar.gz && \
+    rm gromacs-$GMX_VERSION.tar.gz
+
+# make a build dir
+WORKDIR /tmp/gromacs-$GMX_VERSION
 RUN mkdir build
-WORKDIR /opt/gromacs-2022.4/build
-RUN cmake .. -DCMAKE_INSTALL_PREFIX=/opt/gromacs-2022.4 -DGMX_BUILD_OWN_FFTW=ON -DGMX_OPENMP=ON -DGMXAPI=OFF -DCMAKE_BUILD_TYPE=Release
+
+# build gromacs
+WORKDIR /tmp/gromacs-$GMX_VERSION/build
+RUN cmake .. -DCMAKE_INSTALL_PREFIX=/opt/gromacs-$GMX_VERSION -DGMX_BUILD_OWN_FFTW=ON -DGMX_OPENMP=ON -DGMXAPI=OFF -DCMAKE_BUILD_TYPE=Release
 RUN make -j8
 RUN make install
+RUN rm -r /tmp/gromacs-2023.4 && \
+    chown -R 1000:100 /opt/gromacs-$GMX_VERSION
+
+ENV PATH=/opt/gromacs-$GMX_VERSION/bin:$PATH
 
 # Switch to jovyan user.
 USER $NB_USER
 WORKDIR $HOME
 
-RUN conda install ipywidgets nglview mdtraj -y
-
-ENV PATH=/opt/gromacs-2022.4/bin:$PATH
+RUN conda install ipywidgets nglview -y
+RUN pip install mdtraj
 
 # Copy lab workspace
 COPY --chown=1000:100 default-37a8.jupyterlab-workspace /home/jovyan/.jupyter/lab/workspaces/default-37a8.jupyterlab-workspace
