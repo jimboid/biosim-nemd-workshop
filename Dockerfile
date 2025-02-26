@@ -21,10 +21,15 @@ RUN wget ftp://ftp.gromacs.org/gromacs/gromacs-$GMX_VERSION.tar.gz && \
 # make a build dir
 WORKDIR /tmp/gromacs-$GMX_VERSION
 RUN mkdir build
+WORKDIR /tmp/gromacs-$GMX_VERSION/build
 
 # build gromacs
-WORKDIR /tmp/gromacs-$GMX_VERSION/build
-RUN cmake .. -DCMAKE_INSTALL_PREFIX=/opt/gromacs-$GMX_VERSION -DGMX_BUILD_OWN_FFTW=ON -DGMX_OPENMP=ON -DGMXAPI=OFF -DCMAKE_BUILD_TYPE=Release
+RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
+      cmake .. -DCMAKE_INSTALL_PREFIX=/opt/gromacs-$GMX_VERSION -DGMX_BUILD_OWN_FFTW=ON -DGMX_OPENMP=ON -DGMXAPI=OFF -DCMAKE_BUILD_TYPE=Release; \
+    elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
+      cmake .. -DCMAKE_INSTALL_PREFIX=/opt/gromacs-$GMX_VERSION -GMX_SIMD=ARM_SVE -DGMX_SIMD_ARM_SVE_LENGTH=128 -DGMX_BUILD_OWN_FFTW=ON -DGMX_OPENMP=OFF -DGMXAPI=OFF -DCMAKE_BUILD_TYPE=Release; \
+    fi
+
 RUN make -j8
 RUN make install
 RUN rm -r /tmp/gromacs-$GMX_VERSION && \
