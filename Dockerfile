@@ -17,7 +17,7 @@ WORKDIR $HOME
 RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
       conda install conda-forge/linux-64::gromacs=2024.5=nompi_h5f56185_100 -y; \
     elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
-      conda install conda-forge/osx-arm64::gromacs=2024.5=nompi_he3c68ee_100 -y; \
+      conda install conda-forge/linux-aarch64::gromacs=2024.5=nompi_h9afd374_100 -y; \
     fi
 RUN conda install ipywidgets nglview -y
 RUN pip install mdtraj
