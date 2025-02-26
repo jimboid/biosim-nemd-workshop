@@ -8,6 +8,7 @@ LABEL org.opencontainers.image.description="A container environment for the ccpb
 LABEL org.opencontainers.image.licenses=MIT
 
 ARG GMX_VERSION=2025.0
+ARG TARGETPLATFORM
 
 # Root to install "rooty" things.
 USER root
@@ -19,15 +20,14 @@ RUN wget ftp://ftp.gromacs.org/gromacs/gromacs-$GMX_VERSION.tar.gz && \
     rm gromacs-$GMX_VERSION.tar.gz
 
 # make a build dir
-WORKDIR /tmp/gromacs-$GMX_VERSION
-RUN mkdir build
+RUN mkdir /tmp/gromacs-$GMX_VERSION/build
 WORKDIR /tmp/gromacs-$GMX_VERSION/build
 
 # build gromacs
 RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
-      cmake .. -DCMAKE_INSTALL_PREFIX=/opt/gromacs-$GMX_VERSION -DGMX_BUILD_OWN_FFTW=ON -DGMX_OPENMP=ON -DGMXAPI=OFF -DCMAKE_BUILD_TYPE=Release \; \
+      cmake .. -DCMAKE_INSTALL_PREFIX=/opt/gromacs-$GMX_VERSION -DGMX_BUILD_OWN_FFTW=ON -DGMX_OPENMP=ON -DGMXAPI=OFF -DCMAKE_BUILD_TYPE=Release; \
     elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
-      cmake .. -DCMAKE_INSTALL_PREFIX=/opt/gromacs-$GMX_VERSION -GMX_SIMD=ARM_SVE -DGMX_SIMD_ARM_SVE_LENGTH=128 -DGMX_BUILD_OWN_FFTW=ON -DGMX_OPENMP=OFF -DGMXAPI=OFF -DCMAKE_BUILD_TYPE=Release \; \
+      cmake .. -DCMAKE_INSTALL_PREFIX=/opt/gromacs-$GMX_VERSION -GMX_SIMD=ARM_SVE -DGMX_SIMD_ARM_SVE_LENGTH=128 -DGMX_BUILD_OWN_FFTW=ON -DGMX_OPENMP=OFF -DGMXAPI=OFF -DCMAKE_BUILD_TYPE=Release; \
     fi
 
 RUN make -j8
