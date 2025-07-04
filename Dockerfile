@@ -25,7 +25,7 @@ RUN pip install mdtraj
 # Copy lab workspace
 COPY --chown=1000:100 default-37a8.jupyterlab-workspace /home/jovyan/.jupyter/lab/workspaces/default-37a8.jupyterlab-workspace
 
-RUN wget https://www.hecbiosim.ac.uk/workshop_files/D-NEMD_tutorial.tar.xz
+RUN wget https://www.ccpbiosim.ac.uk/file-store/D-NEMD_tutorial.tar.xz
 RUN tar xvf D-NEMD_tutorial.tar.xz && \
     rm D-NEMD_tutorial.tar.xz
 
